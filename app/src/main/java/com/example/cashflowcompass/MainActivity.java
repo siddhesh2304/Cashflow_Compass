@@ -39,13 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 showToast("Location permission is necessary for CashFlowCompass to function properly.");
             }
         }
-        if (requestCode == SMS_PERMISSION_REQUEST && grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkAndShowHelloWorld();
-            } else {
-                showToast("SMS permission is necessary for CashFlowCompass to function properly.");
-            }
-        }
+
     }
 
     private void checkAndShowHelloWorld() {
