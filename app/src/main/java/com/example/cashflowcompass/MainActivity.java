@@ -3,11 +3,14 @@ package com.example.cashflowcompass;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.telephony.SmsManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.SEND_SMS,
-            Manifest.permission.SYSTEM_ALERT_WINDOW
+            Manifest.permission.SYSTEM_ALERT_WINDOW,
+            Manifest.permission.RECEIVE_SMS
     };
 
     private static final String PREFS_NAME = "MyPrefsFile";
@@ -50,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private void requestLocationAndSmsPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.SEND_SMS
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.RECEIVE_SMS
         }, PERMISSIONS_REQUEST_CODE);
     }
 
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAndShowHelloWorld() {
         // Placeholder method to handle what should happen when permissions are granted
-        TextView helloWorldTextView = findViewById(R.id.helloWorldTextView);
+        TextView helloWorldTextView = findViewById(R.id.messageTextView);
         helloWorldTextView.setText("Hello, CashFlowCompass!");
     }
 
@@ -102,5 +107,25 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    // Rest of your code
+    public void MessageLogview(View view) {
+        Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null, null);
+        cursor.moveToFirst();
+        while(cursor!=null) {
+
+            String stringMessage = cursor.getString(12);
+            if (stringMessage.contains("sent")) {
+                displayMessageOnScreen(stringMessage);
+                break;
+            }
+            cursor.moveToNext();
+        }
+
+    }
+
+    private void displayMessageOnScreen(String message)
+    {
+        TextView messageTextView = findViewById(R.id.messageTextView);
+        messageTextView.setText(message);
+    }
+
 }
