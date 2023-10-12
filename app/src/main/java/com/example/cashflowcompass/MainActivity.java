@@ -4,17 +4,20 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.SEND_SMS,
             Manifest.permission.SYSTEM_ALERT_WINDOW,
-            Manifest.permission.RECEIVE_SMS
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_SMS
     };
 
     private static final String PREFS_NAME = "MyPrefsFile";
@@ -100,32 +104,40 @@ public class MainActivity extends AppCompatActivity {
     private void checkAndShowHelloWorld() {
         // Placeholder method to handle what should happen when permissions are granted
         TextView helloWorldTextView = findViewById(R.id.messageTextView);
+        Log.e("hel","World");
         helloWorldTextView.setText("Hello, CashFlowCompass!");
+
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void MessageLogview(View view) {
-        Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null, null);
-        cursor.moveToFirst();
-        while(cursor!=null) {
-
-            String stringMessage = cursor.getString(12);
-            if (stringMessage.contains("sent")) {
-                displayMessageOnScreen(stringMessage);
-                break;
-            }
-            cursor.moveToNext();
-        }
-
-    }
-
     private void displayMessageOnScreen(String message)
     {
-        TextView messageTextView = findViewById(R.id.messageTextView);
-        messageTextView.setText(message);
+        Log.e("SMS", message );
     }
+
+    public void ViewSMSLogs(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
+                    if (stringMessage != null) {
+                        Log.e("SMs", stringMessage);
+
+                    }
+                    cursor.moveToNext();
+                }
+                cursor.close(); // Close the cursor when done
+            }
+        } else {
+            showToast("Read SMS permission is required to view SMS logs.");
+        }
+    }
+
+
 
 }
