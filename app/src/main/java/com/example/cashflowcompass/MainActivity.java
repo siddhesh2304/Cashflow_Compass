@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("SMS", message);
     }
 
+    // this is the change
     public void ViewSMSLogs(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
             SmsHandler.viewSMSLogs(this);
