@@ -65,14 +65,15 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.SEND_SMS,
-                Manifest.permission.RECEIVE_SMS
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_SMS
         }, PERMISSIONS_REQUEST_CODE);
     }
 
     private void requestSystemAlertWindowPermission() {
         if (!Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, SYSTEM_ALERT_WINDOW_PERMISSION_REQUEST_CODE);
+            startActivity(intent);
         }
     }
 
