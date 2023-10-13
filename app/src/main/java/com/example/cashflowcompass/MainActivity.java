@@ -106,38 +106,21 @@ public class MainActivity extends AppCompatActivity {
         TextView helloWorldTextView = findViewById(R.id.messageTextView);
         Log.e("hel","World");
         helloWorldTextView.setText("Hello, CashFlowCompass!");
-
     }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void displayMessageOnScreen(String message)
-    {
-        Log.e("SMS", message );
+    private void displayMessageOnScreen(String message) {
+        Log.e("SMS", message);
     }
 
     public void ViewSMSLogs(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-            Cursor cursor = getContentResolver().query(Uri.parse("content://sms"), null, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
-                    if (stringMessage != null) {
-                        Log.e("SMs", stringMessage);
-
-                    }
-                    cursor.moveToNext();
-                }
-                cursor.close(); // Close the cursor when done
-            }
+            SmsHandler.viewSMSLogs(this);
         } else {
             showToast("Read SMS permission is required to view SMS logs.");
         }
     }
-
-
-
 }
