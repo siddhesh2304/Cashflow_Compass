@@ -3,9 +3,11 @@ package com.example.cashflowcompass;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
+import android.content.BroadcastReceiver;
 import android.net.Uri;
 import android.provider.Settings;
 import android.content.SharedPreferences;
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Register the SMSReceiver dynamically
+        IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        registerReceiver(new SMSReceiver(), filter);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isFirstRun = settings.getBoolean(FIRST_RUN, true);
