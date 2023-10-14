@@ -22,7 +22,7 @@ public class SmsHandler {
                 String sender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
                 if (stringMessage != null) {
                     if (sender != null) {
-                        String s = "Sender-" + sender; // Concatenate sender and message
+                        String s = "Sender-" + sender; // Concatenate sender and message to same
                         s = s + stringMessage+"  "; // Concatenate the message
                         smsList.add(s); // Add the combined string to the list
                     } else {

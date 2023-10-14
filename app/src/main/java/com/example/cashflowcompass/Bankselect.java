@@ -29,7 +29,7 @@ public class Bankselect {
         Log.e("Regex Pattern", regex);
 
         for (String sms : smsList) {
-            Log.e("sms",sms);
+
             // Check if the message contains the pattern
             Matcher matcher = pattern.matcher(sms);
 
@@ -39,7 +39,7 @@ public class Bankselect {
                 if (sms.contains("received") || sms.contains("Received") || sms.contains("Sent") || sms.contains("sent")) {
                     if (!check(banklist, matchedSubstring)) {
                         // Add the matched substring to the banklist if not already present
-
+                            Log.e("chck",sms);
                         banklist.add(matchedSubstring);
                     }
                 }
