@@ -135,4 +135,10 @@ public class MainActivity extends AppCompatActivity {
             showToast("Read SMS permission is required to view SMS logs.");
         }
     }
+
+    public void openSelectBankActivity(View view) {
+        // Open the SelectBankActivity
+        Intent intent = new Intent(this, SelectBankActivity.class);
+        startActivity(intent);
+    }
 }

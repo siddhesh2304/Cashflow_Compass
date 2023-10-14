@@ -49,4 +49,8 @@ public class Bankselect {
             Log.e("Banklist Item", item);
         }
     }
+
+    public static List<String> getBankList() {
+        return banklist;
+    }
 }

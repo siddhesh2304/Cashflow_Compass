@@ -17,9 +17,17 @@
         android:id="@+id/logButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Logssss"
+        android:text="Welcome To Cashflow Compass"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/messageTextView"
         android:onClick="ViewSMSLogs" />
+
+    <Button
+        android:id="@+id/openSelectBankButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Bank"
+        android:onClick="openSelectBankActivity" />
+
 
 </RelativeLayout>

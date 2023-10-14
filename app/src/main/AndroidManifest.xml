@@ -34,5 +34,11 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".SelectBankActivity"
+            android:label="Select Bank">
+        </activity>
+
+
     </application>
 </manifest>
