@@ -19,8 +19,15 @@ public class SmsHandler {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
+                String sender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
                 if (stringMessage != null) {
-                    smsList.add(stringMessage); // Add the message to the list
+                    if (sender != null) {
+                        String s = "Sender-" + sender; // Concatenate sender and message
+                        s = s + stringMessage+"  "; // Concatenate the message
+                        smsList.add(s); // Add the combined string to the list
+                    } else {
+                        smsList.add(stringMessage); // Add the message without the sender
+                    }
                 }
                 cursor.moveToNext();
             }
@@ -31,4 +38,8 @@ public class SmsHandler {
     }
 
 
-}
+
+    }
+
+
+
