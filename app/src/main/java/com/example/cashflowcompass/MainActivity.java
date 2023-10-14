@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_CODE = 1;
@@ -126,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
     // this is the change
     public void ViewSMSLogs(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-            SmsHandler.viewSMSLogs(this);
+          List<String> ans = SmsHandler.viewSMSLogs(this);
+          Bankselect.performTaskOnSMSList(ans);
+
         } else {
             showToast("Read SMS permission is required to view SMS logs.");
         }
