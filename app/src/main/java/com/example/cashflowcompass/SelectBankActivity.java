@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Map;
 
 public class SelectBankActivity extends AppCompatActivity {
 
@@ -17,21 +18,25 @@ public class SelectBankActivity extends AppCompatActivity {
 
         RadioGroup radioGroup = findViewById(R.id.bankRadioGroup);
 
-        // Get the list of banks from Bankselect
-        List<String> banklist = Bankselect.getBankList();
+        // Get the map of banks from Bankselect
+        Map<String, String> bankMap = Bankselect.getBankMap();
 
         // Dynamically create RadioButtons and add them to the RadioGroup
-        for (String bank : banklist) {
+        for (Map.Entry<String, String> entry : bankMap.entrySet()) {
+            int index = 1;
+            String bank = entry.getValue();
+            String accountno = entry.getKey();
+
             RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(bank);
+            radioButton.setText(bank + " "+accountno);
+            radioButton.setId(index); // Set the RadioButton's ID to the index
             radioGroup.addView(radioButton);
         }
 
         // Set a listener to handle RadioButton selection
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             // Handle the selected bank here
-            RadioButton selectedRadioButton = findViewById(checkedId);
-            String selectedBank = selectedRadioButton.getText().toString();
+            String selectedBank = bankMap.get(checkedId);
             // You can perform actions based on the selected bank
         });
     }

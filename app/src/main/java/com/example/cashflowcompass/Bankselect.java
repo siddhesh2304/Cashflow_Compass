@@ -3,22 +3,15 @@ package com.example.cashflowcompass;
 import android.util.Log;
 
 import java.util.ArrayList; // Import ArrayList
+import java.util.HashMap; // Import HashMap
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Bankselect {
-    // Declare a list to store matched substrings and initialize it
-    private static List<String> banklist = new ArrayList<>();
-
-    public static boolean check(List<String> che, String cha) {
-        for (String item : che) {
-            if (item.equals(cha)) {
-                return true; // Match found in the list
-            }
-        }
-        return false; // No match found in the list
-    }
+    // Declare a Map to store the matched substrings and their corresponding index
+    private static Map<String, String> bankMap = new HashMap<>();
 
     public static void performTaskOnSMSList(List<String> smsList) {
         // Define a regular expression pattern to match 'x' or 'X' followed by a 4-digit number
@@ -28,7 +21,8 @@ public class Bankselect {
         Pattern pattern = Pattern.compile(regex);
         Log.e("Regex Pattern", regex);
 
-        for (String sms : smsList) {
+        for (int i = 0; i < smsList.size(); i++) {
+            String sms = smsList.get(i);
 
             // Check if the message contains the pattern
             Matcher matcher = pattern.matcher(sms);
@@ -37,22 +31,30 @@ public class Bankselect {
                 // Process the matched substring
                 String matchedSubstring = matcher.group();
                 if (sms.contains("received") || sms.contains("Received") || sms.contains("Sent") || sms.contains("sent")) {
-                    if (!check(banklist, matchedSubstring)) {
-                        // Add the matched substring to the banklist if not already present
-                            Log.e("chck",sms);
-                        banklist.add(matchedSubstring);
+                    String bankName ="";
+                    if (sms.contains("KOTAK")) {
+                         bankName = "KOTAK";
+                    }
+                    else if(sms.contains("HDFC")) {
+                         bankName =  "HDFC";
+                    } else if (sms.contains("ICICI")) {
+                        bankName="ICICI";
+                    }
+                    if (!bankMap.containsKey(matchedSubstring)&&bankName!="") {
+                            bankMap.put(matchedSubstring, bankName);
+                            Log.e("Banklist Item", "Bank Name: " + bankName + ", Matched Substring: " + matchedSubstring);
+                        }
                     }
                 }
             }
         }
 
-        // Print the full banklist after all iterations
-        for (String item : banklist) {
-            Log.e("Banklist Item", item);
-        }
-    }
 
-    public static List<String> getBankList() {
-        return banklist;
+
+
+
+
+    public static Map<String, String> getBankMap() {
+        return bankMap;
     }
 }
