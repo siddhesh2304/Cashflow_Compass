@@ -1,6 +1,9 @@
 package com.example.cashflowcompass;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
@@ -42,8 +45,41 @@ public class SelectBankActivity extends AppCompatActivity {
     }
 
     public void onSubmitClick(View view) {
-        // Handle the "Submit" button click event
-        // This method will be called when the "Submit" button is clicked
-        // You can add code to process the selected bank or perform other actions
+        // Get the selected RadioButton ID from the RadioGroup
+        RadioGroup radioGroup = findViewById(R.id.bankRadioGroup);
+        int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+
+        if (checkedRadioButtonId != -1) {
+            // Find the RadioButton associated with the selected ID
+            RadioButton selectedRadioButton = findViewById(checkedRadioButtonId);
+
+            // Get the text of the selected RadioButton, which contains the account number
+            String selectedRadioButtonText = selectedRadioButton.getText().toString();
+
+            // Extract the account number from the text
+            String[] parts = selectedRadioButtonText.split(" ");
+            if (parts.length >= 2) {
+                String accountno = parts[1]; // Assuming the account number is the second part
+
+                // Store the selected account number in SharedPreferences
+                SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("selectedAccountNumber", accountno);
+                editor.apply();
+
+                // Now you can use the accountno variable or store it for later use
+            }
+        } else {
+            // No RadioButton is selected, handle this case if necessary
+            // Log an error or display a message to the user
+        }
     }
+
+
+
+
+
+
+
+
 }
