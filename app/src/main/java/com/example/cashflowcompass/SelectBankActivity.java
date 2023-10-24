@@ -31,7 +31,7 @@ public class SelectBankActivity extends AppCompatActivity {
             String accountno = entry.getKey();
 
             RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(bank + " "+accountno);
+            radioButton.setText(bank + " " + accountno);
             radioButton.setId(index); // Set the RadioButton's ID to the index
             radioGroup.addView(radioButton);
         }
@@ -67,19 +67,24 @@ public class SelectBankActivity extends AppCompatActivity {
                 editor.putString("selectedAccountNumber", accountno);
                 editor.apply();
 
-                // Now you can use the accountno variable or store it for later use
+                // Retrieve the list of SMS messages using your SMS handler
+                List<String> smsList = SmsHandler.viewSMSLogs(this);
+
+                // Continue with processing the SMS messages
+                // Create an instance of TransactionDataManager and pass the smsList
+                TransactionDataManager transactionDataManager = new TransactionDataManager(this);
+                List<TransactionDataManager.Transaction> extractedTransactions = transactionDataManager.extractTransactionsFromSMS(smsList);
+
+                // Now you have the extracted transactions that you can use
+                // You can also add them to your TransactionDataManager using addTransaction
+                for (TransactionDataManager.Transaction transaction : extractedTransactions) {
+                    transactionDataManager.addTransaction(transaction);
+                }
+
             }
         } else {
             // No RadioButton is selected, handle this case if necessary
             // Log an error or display a message to the user
         }
     }
-
-
-
-
-
-
-
-
 }

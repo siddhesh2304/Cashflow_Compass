@@ -49,6 +49,17 @@ public class Bankselect {
             }
         }
 
+    public static String getBankNameForAccountNumber(String selectedAccountNumber) {
+        for (Map.Entry<String, String> entry : bankMap.entrySet()) {
+            String accountNumber = entry.getKey();
+            String bankName = entry.getValue();
+            if (accountNumber.equals(selectedAccountNumber)) {
+                return bankName;
+            }
+        }
+        return null; // Account number not found in the bankMap
+    }
+
 
 
 
