@@ -22,7 +22,7 @@ public class SmsHandler {
                 String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
                 String sender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
                 long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE));
-                if (stringMessage != null) {
+                if (stringMessage != null && stringMessage.contains("received")||stringMessage.contains("Received")||stringMessage.contains("Sent")||stringMessage.contains("sent")||stringMessage.contains("Debited")||stringMessage.contains("debited")||stringMessage.contains("Credited")||stringMessage.contains("Debited")) {
                     if (sender != null) {
                         String s = "Sender-" + sender; // Concatenate sender and message to same
                         s = s + stringMessage+"  "; // Concatenate the message
@@ -40,6 +40,50 @@ public class SmsHandler {
 
         return smsList;
     }
+
+    public static List<String> dat(List<String>sms){
+        List<String>date=new ArrayList<>();
+
+        for (int j=0;j<sms.size();j++){
+            String smsm = sms.get(j);
+            String dae =   String.valueOf(smsm.charAt(smsm.length()-27))+String.valueOf(smsm.charAt(smsm.length()-26))+":"+String.valueOf(getMonthNumber(String.valueOf(smsm.charAt(smsm.length()-31))+String.valueOf(smsm.charAt(smsm.length()-30))+String.valueOf(smsm.charAt(smsm.length()-29))))+":"+(String.valueOf(smsm.charAt(smsm.length()-5))+String.valueOf(smsm.charAt(smsm.length()-4))+String.valueOf(smsm.charAt(smsm.length()-3))+String.valueOf(smsm.charAt(smsm.length()-2))+String.valueOf(smsm.charAt(smsm.length()-1))) ;
+            date.add(dae);
+        }
+
+        return date;
+    }
+
+    private static int getMonthNumber(String monthAbbreviation) {
+        switch (monthAbbreviation) {
+            case "Jan":
+                return 1;
+            case "Feb":
+                return 2;
+            case "Mar":
+                return 3;
+            case "Apr":
+                return 4;
+            case "May":
+                return 5;
+            case "Jun":
+                return 6;
+            case "Jul":
+                return 7;
+            case "Aug":
+                return 8;
+            case "Sep":
+                return 9;
+            case "Oct":
+                return 10;
+            case "Nov":
+                return 11;
+            case "Dec":
+                return 12;
+            default:
+                return 0; // Unknown or error
+        }
+    }
+
 
 
 

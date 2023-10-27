@@ -11,19 +11,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
-    </RadioGroup>
+        android:orientation="vertical"></RadioGroup>
 
 
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
+        android:layout_width="105dp"
+        android:layout_height="67dp"
         android:layout_below="@id/bankRadioGroup"
-        android:layout_centerHorizontal="true"
-        android:onClick="onSubmitClick" />
-
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="143dp"
+        android:layout_marginBottom="257dp"
+        android:onClick="onSubmitClick"
+        android:text="Submit" />
 
 
 </RelativeLayout>

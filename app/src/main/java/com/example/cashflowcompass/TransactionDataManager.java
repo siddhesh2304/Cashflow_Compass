@@ -14,8 +14,7 @@ import java.util.regex.Pattern;
 
 public class TransactionDataManager {
     private List<Transaction> transactions;
-    private String selectedAccountNumber; // The selected account number stored in SharedPreferences
-
+    private String selectedAccountNumber;
     public TransactionDataManager(Context context) {
         this.transactions = new ArrayList<>();
         // Retrieve the selected account number from SharedPreferences
@@ -33,37 +32,34 @@ public class TransactionDataManager {
 
     public List<Transaction> extractTransactionsFromSMS(List<String> smsList) {
         List<Transaction> extractedTransactions = new ArrayList<>();
-        Pattern datePattern = Pattern.compile("Date & Time: (\\w{3}) (\\d{2}) (\\d{2}:\\d{2}:\\d{2}) GMT[+-]\\d{2}:\\d{2} (\\d{4})");
-
-        for (String sms : smsList) {
-            if (sms.contains("Credited") || sms.contains("Debited")) {
-                Transaction transaction = extractTransactionFromSMS(sms, selectedAccountNumber);
-                if (transaction != null) {
-                    // Extract the date using regular expressions
-                    Matcher matcher = datePattern.matcher(sms);
-                    if (matcher.find()) {
-                        String month = matcher.group(1);
-                        int day = Integer.parseInt(matcher.group(2));
-                        String time = matcher.group(3);
-                        int year = Integer.parseInt(matcher.group(4));
-
-                        // Convert the month abbreviation to a numeric month
-                        int monthNumber = getMonthNumber(month);
-
-                        // Create a Date object
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                        try {
-                            String dateString = String.format("%02d/%02d/%04d %s", day, monthNumber, year, time);
-                            Date date = dateFormat.parse(dateString);
-                            transaction.setDate(date);
-                        } catch (ParseException e) {
-                            // Handle parsing error
-                        }
+        List<String> dat = SmsHandler.dat(smsList);
+        List<String> filteredamount = new ArrayList<>();
+        List<String> filtereddate = new ArrayList<>();
+        List<String> filteredtranstype = new ArrayList<>();
+        for(int i=0;i<smsList.size();i++) {
+            String sms = smsList.get(i);
+            if (sms.contains(selectedAccountNumber)) {
+                Pattern pattern = Pattern.compile("(received|sent|credited|debited|Received|Sent|Credited|Debited) Rs\\.(\\d+\\.\\d+)");
+                Matcher matcher = pattern.matcher(sms);
+                while (matcher.find()) {
+                    String variation = matcher.group(1); // Get the captured variation
+                    if(variation=="sent"||variation=="Sent"){
+                        variation ="Debited";
                     }
-                    extractedTransactions.add(transaction);
+                    else if(variation=="Received"||variation=="received"){
+                        variation = "Credited";
+                    }
+                    String amountText = matcher.group(2);  // Get the captured amount
+                    double amount = Double.parseDouble(amountText); // Convert the captured amount to a double
+
+                    filtereddate.add(dat.get(i));
+                    filteredamount.add(amountText);
+                    filteredtranstype.add(variation);
                 }
             }
         }
+
+        Log.d("leng", String.valueOf(filteredamount.size()+filteredtranstype.size()+filtereddate.size()));
 
         return extractedTransactions;
     }

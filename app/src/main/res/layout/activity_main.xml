@@ -10,24 +10,30 @@
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello, CashFlowCompass!"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:text="Hello, CashFlowCompass!" />
 
     <Button
         android:id="@+id/logButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome To Cashflow Compass"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/messageTextView"
-        android:onClick="ViewSMSLogs" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="57dp"
+        android:onClick="ViewSMSLogs"
+        android:text="Welcome To Cashflow Compass" />
 
     <Button
         android:id="@+id/openSelectBankButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Bank"
-        android:onClick="openSelectBankActivity" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="134dp"
+        android:layout_marginBottom="216dp"
+        android:onClick="openSelectBankActivity"
+        android:text="Select Bank" />
 
 
 </RelativeLayout>
