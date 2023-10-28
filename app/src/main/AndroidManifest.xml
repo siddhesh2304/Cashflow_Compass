@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cashflowcompass">
-
     <!-- Permissions -->
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -19,29 +20,31 @@
         android:roundIcon="@drawable/cashflow_compass_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.CashFlowCompass">
-
-        <activity android:name=".SplashScreenActivity"
+        <activity
+            android:name=".Dashboard_activity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"></activity>
 
-        <activity android:name=".MainActivity">
-        </activity>
-
-        <receiver android:name=".SMSReceiver"
+        <receiver
+            android:name=".SMSReceiver"
             android:exported="true">
-            <intent-filter  android:priority="2332412">
+            <intent-filter android:priority="2332412">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name=".SelectBankActivity"
-            android:label="Select Bank">
-        </activity>
-
+            android:label="Select Bank"></activity>
     </application>
+
 </manifest>
