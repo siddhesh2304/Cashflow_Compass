@@ -46,26 +46,42 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Register the SMSReceiver dynamically
-        IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(new SMSReceiver(), filter);
-
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isFirstRun = settings.getBoolean(FIRST_RUN, true);
 
         if (isFirstRun) {
-            requestLocationAndSmsPermissions(); // Request location and SMS permissions
-            settings.edit().putBoolean(FIRST_RUN, false).apply();
+            // Request location and SMS permissions
+            requestLocationAndSmsPermissions();
+            if (Settings.canDrawOverlays(this)) {
+                settings.edit().putBoolean(FIRST_RUN, false).apply();
+                navigateToAnotherActivity();
+            }
+
+
         } else {
             // Check if SYSTEM_ALERT_WINDOW permission is granted
             if (Settings.canDrawOverlays(this)) {
+                navigateToAnotherActivity();
             } else {
-                requestSystemAlertWindowPermission(); // Request SYSTEM_ALERT_WINDOW permission
+                //requestSystemAlertWindowPermission();
             }
         }
     }
 
+    public void navigateToAnotherActivity() {
+        // Navigate to another activity (replace AnotherActivity.class with the actual class name of the activity)
+        Intent intent = new Intent(this, Dashboard_activity.class);
+        startActivity(intent);
+        finish(); // Finish the current activity to prevent returning to it
+    }
+    public void navigateToMainActivity() {
+    // Navigate to another activity (replace AnotherActivity.class with the actual class name of the activity)
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivity(intent);
+    finish(); // Finish the current activity to prevent returning to it
+}
     private void requestLocationAndSmsPermissions() {
+        Log.d("PermissionDebug", "Requesting location and SMS permissions");
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.SEND_SMS,
@@ -84,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             boolean allPermissionsGranted = true;
             for (int result : grantResults) {
@@ -93,12 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (allPermissionsGranted) {
-                requestSystemAlertWindowPermission(); // Request SYSTEM_ALERT_WINDOW permission after location and SMS permissions are granted
+                requestSystemAlertWindowPermission();
             } else {
                 showToast("Some permissions are necessary for CashFlowCompass to function properly.");
             }
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -125,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
           List<String> ans = SmsHandler.viewSMSLogs(this);
           Bankselect.performTaskOnSMSList(ans);
-          openSelectBankActivity(view);
+          openSelectBankActivity();
 
         } else {
             showToast("Read SMS permission is required to view SMS logs.");
         }
     }
 
-    public void openSelectBankActivity(View view) {
+    public void openSelectBankActivity() {
         // Open the SelectBankActivity
         Intent intent = new Intent(this, SelectBankActivity.class);
         startActivity(intent);

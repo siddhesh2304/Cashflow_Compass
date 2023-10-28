@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dashboard_Activity">
+    tools:context=".Dashboard_activity">
 
+    <!-- Title or App Name -->
     <TextView
-        android:id="@+id/totalExpenseTextView"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="DashBoard"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Total Expense: $0.00"
-        android:textSize="18sp" />
+        android:layout_marginTop="24dp"
+        android:textSize="24sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/totalExpenseTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Today's Transactions"
-        android:textSize="20sp" />
+    <!-- Buttons for Different Processes -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/transactionsRecyclerView"
+    <Button
+        android:id="@+id/transactionsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/totalExpenseTextView"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@+id/title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="286dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Transactions" />
+
+    <Button
+        android:id="@+id/budgetPlannerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/transactionsButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Budget Planner" />
+
+    <Button
+        android:id="@+id/insightsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insights"
+        android:layout_below="@+id/budgetPlannerButton"
+        android:layout_margin="16dp"/>
 
 </RelativeLayout>
