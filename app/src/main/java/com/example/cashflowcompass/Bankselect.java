@@ -15,7 +15,7 @@ public class Bankselect {
 
     public static void performTaskOnSMSList(List<String> smsList) {
         // Define a regular expression pattern to match 'x' or 'X' followed by a 4-digit number
-        String regex = "[xX]\\d{4}";
+        String regex = "[xX**]\\d{4}";
 
         // Create a Pattern object
         Pattern pattern = Pattern.compile(regex);
@@ -30,7 +30,7 @@ public class Bankselect {
             while (matcher.find()) {
                 // Process the matched substring
                 String matchedSubstring = matcher.group();
-                if (sms.contains("received") || sms.contains("Received") || sms.contains("Sent") || sms.contains("sent")) {
+                if (sms.contains("received") || sms.contains("Received") || sms.contains("Sent") || sms.contains("sent")||sms.contains("Sender")||sms.contains("sender")||sms.contains("Credited")||sms.contains("credited")||sms.contains("debited")||sms.contains("Debited")) {
                     String bankName ="";
                     if (sms.contains("KOTAK")) {
                          bankName = "KOTAK";

@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // Check if SYSTEM_ALERT_WINDOW permission is granted
             if (Settings.canDrawOverlays(this)) {
-                checkAndShowHelloWorld();
             } else {
                 requestSystemAlertWindowPermission(); // Request SYSTEM_ALERT_WINDOW permission
             }
@@ -106,19 +105,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SYSTEM_ALERT_WINDOW_PERMISSION_REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
-                checkAndShowHelloWorld();
             } else {
                 showToast("Display over other apps permission is necessary for CashFlowCompass to function properly.");
             }
         }
     }
 
-    private void checkAndShowHelloWorld() {
-        // Placeholder method to handle what should happen when permissions are granted
-        TextView helloWorldTextView = findViewById(R.id.messageTextView);
-        Log.e("hel","World");
-        helloWorldTextView.setText("Hello, CashFlowCompass!");
-    }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -133,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
           List<String> ans = SmsHandler.viewSMSLogs(this);
           Bankselect.performTaskOnSMSList(ans);
+          openSelectBankActivity(view);
 
         } else {
             showToast("Read SMS permission is required to view SMS logs.");

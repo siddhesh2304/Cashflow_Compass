@@ -6,34 +6,133 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Heading for Permissions -->
+
+    <!-- Access SMS Section -->
+
+    <!-- Access Location Section -->
+
+    <!-- Display Over Other Apps Section -->
+
+    <!-- Agree and Continue Button with onClick function -->
+
+    <!-- Select Bank Button with onClick function -->
+
     <TextView
-        android:id="@+id/messageTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/permissionsHeader"
+        android:layout_width="372dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Hello, CashFlowCompass!" />
-
-    <Button
-        android:id="@+id/logButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/messageTextView"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="57dp"
-        android:onClick="ViewSMSLogs"
-        android:text="Welcome To Cashflow Compass" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="18dp"
+        android:text="Permissions and Privacy "
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="296dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/accessSmsCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Access SMS"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We need access to SMS for XYZ reason." />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="535dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/accessLocationCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Access Location"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We need access to your location for ABC reason." />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="415dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/displayOverAppsCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Display Over Other Apps"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We need this permission for DEF reason." />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/openSelectBankButton"
+        android:id="@+id/agreeContinueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="134dp"
-        android:layout_marginBottom="216dp"
-        android:onClick="openSelectBankActivity"
-        android:text="Select Bank" />
-
+        android:layout_marginStart="103dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginBottom="65dp"
+        android:onClick="ViewSMSLogs"
+        android:text="Agree and Continue" />
 
 </RelativeLayout>

@@ -20,6 +20,10 @@ public class SelectBankActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_bank);
 
         RadioGroup radioGroup = findViewById(R.id.bankRadioGroup);
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isFirstStartup", false);
+        editor.apply();
 
         // Get the map of banks from Bankselect
         Map<String, String> bankMap = Bankselect.getBankMap();

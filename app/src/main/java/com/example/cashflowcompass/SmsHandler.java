@@ -22,7 +22,7 @@ public class SmsHandler {
                 String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
                 String sender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
                 long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE));
-                if (stringMessage != null && stringMessage.contains("received")||stringMessage.contains("Received")||stringMessage.contains("Sent")||stringMessage.contains("sent")||stringMessage.contains("Debited")||stringMessage.contains("debited")||stringMessage.contains("Credited")||stringMessage.contains("Debited")) {
+                if (stringMessage != null && stringMessage.contains("received")||stringMessage.contains("Received")||stringMessage.contains("Sent")||stringMessage.contains("sent")||stringMessage.contains("Debited")||stringMessage.contains("debited")||stringMessage.contains("Credited")||stringMessage.contains("credited")) {
                     if (sender != null) {
                         String s = "Sender-" + sender; // Concatenate sender and message to same
                         s = s + stringMessage+"  "; // Concatenate the message
