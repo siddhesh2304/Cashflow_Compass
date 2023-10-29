@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Telephony;
 import android.util.Log;
-
+import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +15,10 @@ public class SmsHandler {
     public static List<String> viewSMSLogs(Context context) {
         List<String> smsList = new ArrayList<>();
 
+        Calendar cal = Calendar.getInstance();
+        int currentMonth = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
+        int currentYear = cal.get(Calendar.YEAR);
+
         Cursor cursor = context.getContentResolver().query(Uri.parse("content://sms"), null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -22,7 +26,17 @@ public class SmsHandler {
                 String stringMessage = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY));
                 String sender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS));
                 long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE));
-                if (stringMessage != null && stringMessage.contains("received")||stringMessage.contains("Received")||stringMessage.contains("Sent")||stringMessage.contains("sent")||stringMessage.contains("Debited")||stringMessage.contains("debited")||stringMessage.contains("Credited")||stringMessage.contains("credited")) {
+
+                cal.setTimeInMillis(timestamp);
+                int smsMonth = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
+                int smsYear = cal.get(Calendar.YEAR);
+
+                if (stringMessage != null &&
+                        (stringMessage.contains("received") || stringMessage.contains("Received") ||
+                                stringMessage.contains("Sent") || stringMessage.contains("sent") ||
+                                stringMessage.contains("Debited") || stringMessage.contains("debited") ||
+                                stringMessage.contains("Credited") || stringMessage.contains("credited")) &&
+                        currentMonth == smsMonth && currentYear == smsYear){
                     if (sender != null) {
                         String s = "Sender-" + sender; // Concatenate sender and message to same
                         s = s + stringMessage+"  "; // Concatenate the message
