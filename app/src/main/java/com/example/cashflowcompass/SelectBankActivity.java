@@ -36,7 +36,7 @@ public class SelectBankActivity extends AppCompatActivity {
 
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(bank + " " + accountno);
-            radioButton.setId(index); // Set the RadioButton's ID to the index
+            radioButton.setId(View.generateViewId()); // Set a unique ID for each RadioButton
             radioGroup.addView(radioButton);
         }
 
