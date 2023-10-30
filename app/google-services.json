@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "511858751589",
+    "firebase_url": "https://cash-flow-compass-default-rtdb.firebaseio.com",
+    "project_id": "cash-flow-compass",
+    "storage_bucket": "cash-flow-compass.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511858751589:android:91e9e87914ebf8c384ae8c",
+        "android_client_info": {
+          "package_name": "com.example.cashflowcompass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTA4Z9vLsHXnZb0kCkkIWzJBUoWtXfOeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

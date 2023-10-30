@@ -4,6 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.cashflowcompass.SmsHandler;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,11 +21,16 @@ import java.util.regex.Pattern;
 public class TransactionDataManager {
     private List<Transaction> transactions;
     private String selectedAccountNumber;
+    private DatabaseReference databaseReference;
+
     public TransactionDataManager(Context context) {
         this.transactions = new ArrayList<>();
         // Retrieve the selected account number from SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         this.selectedAccountNumber = preferences.getString("selectedAccountNumber", "default_value");
+
+        // Initialize the DatabaseReference with the reference to your Firebase Realtime Database
+        databaseReference = FirebaseDatabase.getInstance().getReference("transactions");
     }
 
     public void addTransaction(Transaction transaction) {
@@ -35,21 +46,22 @@ public class TransactionDataManager {
         List<String> dat = SmsHandler.dat(smsList);
         List<String> filteredamount = new ArrayList<>();
         List<String> filtereddate = new ArrayList<>();
-        List<String> filteredtranstype = new ArrayList<>();
-        for(int i=0;i<smsList.size();i++) {
+        List<String> filteredtranstype = new ArrayList();
+
+        for (int i = 0; i < smsList.size(); i++) {
             String sms = smsList.get(i);
             if (sms.contains(selectedAccountNumber)) {
                 Pattern pattern = Pattern.compile("(received|sent|credited|debited|Received|Sent|Credited|Debited) Rs\\.(\\d+\\.\\d+)");
                 Matcher matcher = pattern.matcher(sms);
                 while (matcher.find()) {
+
                     String variation = matcher.group(1); // Get the captured variation
-                    if(variation=="sent"||variation=="Sent"){
-                        variation ="Debited";
-                    }
-                    else if(variation=="Received"||variation=="received"){
+                    if (variation.equalsIgnoreCase("sent") || variation.equalsIgnoreCase("Sent")) {
+                        variation = "Debited";
+                    } else if (variation.equalsIgnoreCase("Received") || variation.equalsIgnoreCase("received")) {
                         variation = "Credited";
                     }
-                    String amountText = matcher.group(2);  // Get the captured amount
+                    String amountText = matcher.group(2); // Get the captured amount
                     double amount = Double.parseDouble(amountText); // Convert the captured amount to a double
 
                     filtereddate.add(dat.get(i));
@@ -59,72 +71,68 @@ public class TransactionDataManager {
             }
         }
 
-        Log.d("leng", String.valueOf(filteredamount.size()+filteredtranstype.size()+filtereddate.size()));
+        Log.d("leng", String.valueOf(filteredamount.size() + filteredtranstype.size() + filtereddate.size()));
+
+        // Push filtered data to Firebase
+        String Bankname = Bankselect.getBankNameForAccountNumber(selectedAccountNumber);
+        for (int i = 0; i < filtereddate.size(); i++) {
+            String date = filtereddate.get(i);
+            String amount = filteredamount.get(i);
+            String transtype = filteredtranstype.get(i);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date parsedDate = null;
+            try {
+                parsedDate = dateFormat.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Transaction transaction = new Transaction(selectedAccountNumber, Bankname, TransactionType.valueOf(transtype.toUpperCase()), Double.parseDouble(amount), parsedDate);
+            addTransaction(transaction);
+            pushDataToFirebase(transaction);
+        }
 
         return extractedTransactions;
     }
 
-    private Transaction extractTransactionFromSMS(String sms, String selectedAccountNumber) {
-        // Implement SMS parsing logic here based on your SMS format
-        // You should extract account number, bank name, transaction type, amount, and time.
+    private void pushDataToFirebase(Transaction transaction) {
+        Log.d("ANSER", "Pushing data to Firebase");
 
-        // For demonstration, let's assume you have parsed the data into the following variables:
-        String accountNumber = selectedAccountNumber; // Replace with your actual parsing logic
-        String bankName = Bankselect.getBankNameForAccountNumber(accountNumber); // Get bank name from Bankselect class
-        TransactionType transactionType = TransactionType.CREDITED; // Default to CREDITED
-        double amount = 100.0; // Replace with your actual parsing logic
-        // No need for date and time here as it's extracted in extractTransactionsFromSMS
+        // Get a reference to the "transactions" node in your database
+        DatabaseReference transactionsReference = databaseReference.child("transactions");
 
-        // Check if the SMS contains "Credited" or "Debited" and set the transaction type accordingly
-        if (sms.contains("Credited")) {
-            transactionType = TransactionType.CREDITED;
-        } else if (sms.contains("Debited")) {
-            transactionType = TransactionType.DEBITED;
-        }
-
-        // Log the values for debugging
-        Log.d("Transaction", "Account Number: " + accountNumber);
-        Log.d("Transaction", "Bank Name: " + bankName);
-        Log.d("Transaction", "Transaction Type: " + transactionType.toString());
-
-        // Check if the extracted account number matches the selected account number
-        if (accountNumber.equals(selectedAccountNumber)) {
-            // If it matches, create a new Transaction object and return it
-            return new Transaction(accountNumber, bankName, transactionType, amount);
-        }
-
-        return null; // Return null if the selected account number doesn't match
+        // Push the data to the "transactions" node in the Firebase Realtime Database
+        String transactionKey = transactionsReference.push().getKey();
+        transactionsReference.child(transactionKey).setValue(transaction);
     }
 
-    private int getMonthNumber(String monthAbbreviation) {
-        switch (monthAbbreviation) {
-            case "Jan":
-                return 1;
-            case "Feb":
-                return 2;
-            case "Mar":
-                return 3;
-            case "Apr":
-                return 4;
-            case "May":
-                return 5;
-            case "Jun":
-                return 6;
-            case "Jul":
-                return 7;
-            case "Aug":
-                return 8;
-            case "Sep":
-                return 9;
-            case "Oct":
-                return 10;
-            case "Nov":
-                return 11;
-            case "Dec":
-                return 12;
-            default:
-                return 0; // Unknown or error
-        }
+    public void retrieveDataFromFirebase(final FirebaseCallback callback) {
+        Log.d("ANSER", "Retrieving data from Firebase");
+
+        // Get a reference to the "transactions" node in your database
+        DatabaseReference transactionsReference = databaseReference.child("transactions");
+
+        // Add a ValueEventListener to fetch data
+        transactionsReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    Transaction transaction = childSnapshot.getValue(Transaction.class);
+                    if (transaction != null) {
+                        callback.onCallback(transaction);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e("FirebaseData", "Failed to read data from Firebase.", error.toException());
+            }
+        });
+    }
+
+    // Define a callback interface
+    public interface FirebaseCallback {
+        void onCallback(Transaction transaction);
     }
 
     public class Transaction {
@@ -134,11 +142,16 @@ public class TransactionDataManager {
         private double amount;
         private Date date;
 
-        public Transaction(String accountNumber, String bankName, TransactionType transactionType, double amount) {
+        public Transaction() {
+            // Default constructor required for Firebase
+        }
+
+        public Transaction(String accountNumber, String bankName, TransactionType transactionType, double amount, Date date) {
             this.accountNumber = accountNumber;
             this.bankName = bankName;
             this.transactionType = transactionType;
             this.amount = amount;
+            this.date = date;
         }
 
         // Getters and setters for each field
@@ -182,11 +195,9 @@ public class TransactionDataManager {
         public void setAmount(double amount) {
             this.amount = amount;
         }
-
-
     }
 
-    enum TransactionType {
+    public enum TransactionType {
         CREDITED,
         DEBITED
     }

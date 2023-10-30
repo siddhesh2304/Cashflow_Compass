@@ -38,7 +38,7 @@ public class SmsHandler {
                                 stringMessage.contains("Credited") || stringMessage.contains("credited")) &&
                         currentMonth == smsMonth && currentYear == smsYear){
                     if (sender != null) {
-                        String s = "Sender-" + sender; // Concatenate sender and message to same
+                        String s = "Sender-" + sender+" "; // Concatenate sender and message to same
                         s = s + stringMessage+"  "; // Concatenate the message
                         s += "Date & Time: " + new Date(timestamp) + "\n";
                         smsList.add(s); // Add the combined string to the list
