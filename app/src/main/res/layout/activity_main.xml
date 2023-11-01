@@ -18,6 +18,23 @@
 
     <!-- Select Bank Button with onClick function -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="570dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CashFlow Compass is committed to ensuring the privacy and security of your personal financial data. To provide you with the best possible user experience and the features that you desire, we request the following permissions:
+
+" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/permissionsHeader"
         android:layout_width="372dp"
@@ -33,13 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="296dp"
+        android:layout_marginBottom="240dp"
         android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/accessSmsCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +68,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="We need access to SMS for XYZ reason." />
+                android:text=" CashFlow Compass requires SMS permissions to extract transaction information from your SMS messages. This enables us to categorize and manage your financial transactions effectively. We assure you that your SMS data will be processed securely and will not be shared with any third parties." />
         </LinearLayout>
     </LinearLayout>
 
@@ -64,13 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="535dp"
+        android:layout_marginBottom="490dp"
         android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/accessLocationCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,7 +94,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="We need access to your location for ABC reason." />
+                android:text="We request access to your device's location for the sole purpose of providing location-based features that enhance your user experience. " />
         </LinearLayout>
     </LinearLayout>
 
@@ -95,13 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="415dp"
+        android:layout_marginBottom="367dp"
         android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/displayOverAppsCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,7 +120,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="We need this permission for DEF reason." />
+                android:text="This permission is needed to enable our app to overlay information on top of other apps, providing you with a seamless and accessible way to manage your transactions, label them, and receive insights. We respect your privacy and will only use this permission for the intended purpose." />
         </LinearLayout>
     </LinearLayout>
 
@@ -129,10 +131,19 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="103dp"
-        android:layout_marginEnd="106dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginStart="107dp"
+        android:layout_marginEnd="102dp"
+        android:layout_marginBottom="68dp"
         android:onClick="ViewSMSLogs"
         android:text="Agree and Continue" />
+
+    <CheckBox
+        android:id="@+id/accessSmsCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="312dp"
+        android:layout_marginBottom="74dp" />
 
 </RelativeLayout>
