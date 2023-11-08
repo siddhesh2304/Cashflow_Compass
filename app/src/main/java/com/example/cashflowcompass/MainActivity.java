@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             if (Settings.canDrawOverlays(this)) {
                 settings.edit().putBoolean(FIRST_RUN, false).apply();
                 navigateToAnotherActivity();
+                onBackPressed();
             }
 
 
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // Navigate to another activity (replace AnotherActivity.class with the actual class name of the activity)
         Intent intent = new Intent(this, Dashboard_activity.class);
         startActivity(intent);
-        finish(); // Finish the current activity to prevent returning to it
+        finish();
     }
     public void navigateToMainActivity() {
     // Navigate to another activity (replace AnotherActivity.class with the actual class name of the activity)
@@ -159,4 +160,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SelectBankActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing (disable back button navigation)
+        // If you don't call super.onBackPressed(), the back button won't have any effect.
+    }
+
 }

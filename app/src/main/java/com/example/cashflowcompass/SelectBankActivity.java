@@ -1,6 +1,7 @@
 package com.example.cashflowcompass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -90,5 +91,14 @@ public class SelectBankActivity extends AppCompatActivity {
             // No RadioButton is selected, handle this case if necessary
             // Log an error or display a message to the user
         }
+        todashboard();
+
+
+
+    }
+
+    public void todashboard(){
+        Intent intent = new Intent(this, Dashboard_activity.class);
+        startActivity(intent);
     }
 }

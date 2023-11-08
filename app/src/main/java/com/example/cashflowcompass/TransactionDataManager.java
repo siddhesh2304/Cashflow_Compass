@@ -22,6 +22,9 @@ public class TransactionDataManager {
     private List<Transaction> transactions;
     private String selectedAccountNumber;
     private DatabaseReference databaseReference;
+    List<String> filteredamount = new ArrayList<>();
+    List<String> filtereddate = new ArrayList<>();
+    List<String> filteredtranstype = new ArrayList();
 
     public TransactionDataManager(Context context) {
         this.transactions = new ArrayList<>();
@@ -44,9 +47,6 @@ public class TransactionDataManager {
     public List<Transaction> extractTransactionsFromSMS(List<String> smsList) {
         List<Transaction> extractedTransactions = new ArrayList<>();
         List<String> dat = SmsHandler.dat(smsList);
-        List<String> filteredamount = new ArrayList<>();
-        List<String> filtereddate = new ArrayList<>();
-        List<String> filteredtranstype = new ArrayList();
 
         for (int i = 0; i < smsList.size(); i++) {
             String sms = smsList.get(i);
@@ -54,7 +54,6 @@ public class TransactionDataManager {
                 Pattern pattern = Pattern.compile("(received|sent|credited|debited|Received|Sent|Credited|Debited) Rs\\.(\\d+\\.\\d+)");
                 Matcher matcher = pattern.matcher(sms);
                 while (matcher.find()) {
-
                     String variation = matcher.group(1); // Get the captured variation
                     if (variation.equalsIgnoreCase("sent") || variation.equalsIgnoreCase("Sent")) {
                         variation = "Debited";
@@ -70,8 +69,6 @@ public class TransactionDataManager {
                 }
             }
         }
-
-        Log.d("leng", String.valueOf(filteredamount.size() + filteredtranstype.size() + filtereddate.size()));
 
         // Push filtered data to Firebase
         String Bankname = Bankselect.getBankNameForAccountNumber(selectedAccountNumber);
@@ -96,22 +93,15 @@ public class TransactionDataManager {
 
     private void pushDataToFirebase(Transaction transaction) {
         Log.d("ANSER", "Pushing data to Firebase");
-
-        // Get a reference to the "transactions" node in your database
-        DatabaseReference transactionsReference = databaseReference.child("transactions");
-
-        // Push the data to the "transactions" node in the Firebase Realtime Database
-        String transactionKey = transactionsReference.push().getKey();
-        transactionsReference.child(transactionKey).setValue(transaction);
+        String accountNumber = transaction.getAccountNumber();
+        DatabaseReference accountReference = databaseReference.child(accountNumber);
+        String transactionKey = accountReference.push().getKey();
+        accountReference.child(transactionKey).setValue(transaction);
     }
 
     public void retrieveDataFromFirebase(final FirebaseCallback callback) {
         Log.d("ANSER", "Retrieving data from Firebase");
-
-        // Get a reference to the "transactions" node in your database
         DatabaseReference transactionsReference = databaseReference.child("transactions");
-
-        // Add a ValueEventListener to fetch data
         transactionsReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -191,14 +181,23 @@ public class TransactionDataManager {
         public double getAmount() {
             return amount;
         }
-
-        public void setAmount(double amount) {
-            this.amount = amount;
-        }
     }
 
     public enum TransactionType {
         CREDITED,
         DEBITED
+    }
+
+    // Methods to access the filtered lists
+    public List<String> getFilteredAmount() {
+        return filteredamount;
+    }
+
+    public List<String> getFilteredDate() {
+        return filtereddate;
+    }
+
+    public List<String> getFilteredTransactionType() {
+        return filteredtranstype;
     }
 }
